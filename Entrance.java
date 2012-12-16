@@ -1,6 +1,7 @@
 
 public class Entrance implements Location {
 	Player player;
+	ItemHolder ih = new ItemHolder();
 	
 	public Entrance(Player player) {
 		this.player = player;
@@ -13,7 +14,9 @@ public class Entrance implements Location {
 
 	@Override
 	public void inspect() {
-		System.out.println("It takes your eyes some time to get used to the darkness of the place. There is hallway straight ahead. There's a living room to your left, and stairs leading up to the upperfloor to your right.");
+		System.out.println("It takes your eyes some time to get used to the darkness of the place." +
+				"There is hallway straight ahead. There's a living room to your left, and stairs " +
+				"leading up to the upperfloor to your right. You notice a key on the stand beside you.");
 	}
 
 	@Override
@@ -37,5 +40,29 @@ public class Entrance implements Location {
 	public void goRight() {
 		System.out.println("You take the stairs.");
 		player.setLocation(player.goToUpperFloor());
+	}
+
+	@Override
+	public boolean take(String item) {
+		if (ih.search(item)) {
+			ih.remove(item);
+			return true;
+		}
+		System.out.println(item + " doesn't even exist here.");
+		return false;
+	}
+
+	@Override
+	public boolean use(String item) {
+		switch (item) {
+			default:
+				System.out.println("You can't use that here.");
+				return false;
+		}
+	}
+
+	@Override
+	public void addItem(String item) {
+		ih.add(item);
 	}
 }

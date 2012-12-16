@@ -1,6 +1,7 @@
 
 public class LivingRoom implements Location {
-Player player;
+	Player player;
+	ItemHolder ih = new ItemHolder();
 	
 	public LivingRoom(Player player) {
 		this.player = player;
@@ -35,5 +36,29 @@ Player player;
 	@Override
 	public void goDownStairs() {
 		 System.out.println("You are already at the bottom floor of the house.");
+	}
+	
+	@Override
+	public boolean take(String item) {
+		if (ih.search(item)) {
+			ih.remove(item);
+			return true;
+		}
+		System.out.println(item + " doesn't even exist here.");
+		return false;
+	}
+
+	@Override
+	public boolean use(String item) {
+		switch (item) {
+			default:
+				System.out.println("You can't use that here.");
+				return false;
+		}
+	}
+
+	@Override
+	public void addItem(String item) {
+		ih.add(item);
 	}
 }

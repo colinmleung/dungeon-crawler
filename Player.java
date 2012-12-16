@@ -4,6 +4,7 @@ import java.util.Observer;
 
 public class Player implements Observer {
 	private volatile static Player player;
+	private ItemHolder ih;
 	Location entrance;
 	Location livingRoom;
 	Location upperFloor;
@@ -24,9 +25,11 @@ public class Player implements Observer {
 	
 	public void preparePlayer() {
 		entrance = new Entrance(this);
+		entrance.addItem("key");
 		livingRoom = new LivingRoom(this);
 		upperFloor = new UpperFloor(this);
 		location = entrance;
+		ih = new ItemHolder();
 	}
 	
 	public void stateLocation() {
@@ -53,6 +56,18 @@ public class Player implements Observer {
 		location.goDownStairs();
 	}
 	
+	public void take(String item) {
+		if (location.take(item)) {
+			ih.add(item);
+		}
+	}
+	
+	public void use(String item) {
+		if (ih.search(item) && location.use(item)) {
+			ih.remove(item);
+		}
+	}
+
 	public Location goToLivingRoom() {
 		return livingRoom;
 	}
@@ -72,24 +87,58 @@ public class Player implements Observer {
 	public void update(Observable obj, Object arg) {
 		if (arg instanceof String[]) {
 			String[] storage = (String[]) arg;
-			if (storage[0].equals("hello")) {
-				System.out.println("Hello there, commands are working.");
-			} else if (storage[0].equals("go")) {
-				if (storage[1].equals("right")) {
-					goRight();
-				} else if (storage[1].equals("left")) {
-					goLeft();
-				} else if (storage[1].equals("upstairs")) {
-					goUpStairs();
-				} else if (storage[1].equals("downstairs")) {
-					goDownStairs();
-				}
-			} else if (storage[0].equals("inspect") && storage[1].equals("location")) {
-				inspect();
-			} else if (storage[0].equals("state") && storage[1].equals("location")) {
-				stateLocation();
-			} else {
-				System.out.println("Try a different command.");
+			switch (storage[0]) {
+				case "hello":
+					System.out.println("Hello there, commands are working.");
+					break;
+				case "go":
+					switch (storage[1]) {
+						case "right":
+							goRight();
+							break;
+						case "left":
+							goLeft();
+							break;
+						case "upstairs":
+							goUpStairs();
+							break;
+						case "downstairs":
+							goDownStairs();
+							break;
+						default:
+							System.out.println("Go where?");
+							break;
+					}
+					break;
+				case "inspect":
+					switch (storage[1]) {
+						case "location":
+							inspect();
+							break;
+						default:
+							System.out.println("Inspect what?");
+							break;
+					}
+					break;
+				case "state":
+					switch (storage[1]) {
+						case "location":
+							stateLocation();
+							break;
+						default:
+							System.out.println("State what?");
+							break;
+					}
+					break;
+				case "take":
+					take(storage[1]);
+					break;
+				case "use":
+					use(storage[1]);
+					break;
+				default:
+					System.out.println("Unrecognized command. Please try again.");
+					break;
 			}
 		}
 	}
