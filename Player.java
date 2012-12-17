@@ -3,12 +3,21 @@ import java.util.Observer;
 
 
 public class Player implements Observer {
+	
 	private volatile static Player player;
+	
 	private ItemHolder ih;
+	
+	Location location;
 	Location entrance;
 	Location livingRoom;
+	Location diningRoom;
+	Location kitchen;
 	Location upperFloor;
-	Location location;
+	Location hallway;
+	Location leftRoom;
+	Location rightRoom;
+	Location centerRoom;
 	
 	private Player() {}
 	
@@ -24,12 +33,23 @@ public class Player implements Observer {
 	}
 	
 	public void preparePlayer() {
+		ih = new ItemHolder();
+		
 		entrance = new Entrance(this);
 		entrance.addItem("key");
 		livingRoom = new LivingRoom(this);
+		livingRoom.addItem("lamp");
+		diningRoom = new DiningRoom(this);
+		diningRoom.addItem("cushion");
+		kitchen = new Kitchen(this);
+		livingRoom.addItem("cleaver");
 		upperFloor = new UpperFloor(this);
+		hallway = new Hallway(this);
+		leftRoom = new LeftRoom(this);
+		rightRoom = new RightRoom(this);
+		centerRoom = new CenterRoom(this);
+		
 		location = entrance;
-		ih = new ItemHolder();
 	}
 	
 	public void stateLocation() {
@@ -38,6 +58,29 @@ public class Player implements Observer {
 	
 	public void inspect() {
 		location.inspect();
+	}
+	
+	public void take(String item) {
+		if (location.take(item)) {
+			ih.add(item);
+		}
+	}
+	
+	public void use(String item) {
+		if (ih.search(item)) {
+			if (location.use(item)) {
+				ih.remove(item);
+			}
+			System.out.println("You don't have that.");
+		}
+	}
+	
+	public void goForward() {
+		location.goForward();
+	}
+	
+	public void goBack() {
+		location.goBack();
 	}
 	
 	public void goLeft() {
@@ -56,28 +99,41 @@ public class Player implements Observer {
 		location.goDownStairs();
 	}
 	
-	public void take(String item) {
-		if (location.take(item)) {
-			ih.add(item);
-		}
-	}
 	
-	public void use(String item) {
-		if (ih.search(item) && location.use(item)) {
-			ih.remove(item);
-		}
+	public Location goToEntrance() {
+		return entrance;
 	}
 
 	public Location goToLivingRoom() {
 		return livingRoom;
 	}
 	
+	public Location goToDiningRoom() {
+		return diningRoom;
+	}
+	
+	public Location goToKitchen() {
+		return kitchen;
+	}
+	
 	public Location goToUpperFloor() {
 		return upperFloor;
 	}
 	
-	public Location goToEntrance() {
-		return entrance;
+	public Location goToHallway() {
+		return hallway;
+	}
+	
+	public Location goToLeftRoom() {
+		return leftRoom;
+	}
+	
+	public Location goToRightRoom() {
+		return rightRoom;
+	}
+	
+	public Location goToCenterRoom() {
+		return centerRoom;
 	}
 	
 	public void setLocation(Location location) {
@@ -93,6 +149,12 @@ public class Player implements Observer {
 					break;
 				case "go":
 					switch (storage[1]) {
+						case "forward":
+							goForward();
+							break;
+						case "back":
+							goBack();
+							break;
 						case "right":
 							goRight();
 							break;

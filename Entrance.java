@@ -1,4 +1,5 @@
 
+
 public class Entrance implements Location {
 	Player player;
 	ItemHolder ih = new ItemHolder();
@@ -27,7 +28,7 @@ public class Entrance implements Location {
 
 	@Override
 	public void goUpStairs() {
-		 System.out.println("You take the stairs.");
+		 System.out.println("You take the stairs up.");
 		 player.setLocation(player.goToUpperFloor());
 	}
 
@@ -40,6 +41,18 @@ public class Entrance implements Location {
 	public void goRight() {
 		System.out.println("You take the stairs.");
 		player.setLocation(player.goToUpperFloor());
+	}
+	
+	@Override
+	public void goForward() {
+		System.out.println("You walk forward into the kitchen.");
+		player.setLocation(player.goToKitchen());
+	}
+
+	@Override
+	public void goBack() {
+		System.out.println("You try to get out of the house. You didn't notice the door closing slowly behind you and locking. " +
+				"Guess you gotta do this the hard way.");
 	}
 
 	@Override
@@ -65,4 +78,6 @@ public class Entrance implements Location {
 	public void addItem(String item) {
 		ih.add(item);
 	}
+
+
 }

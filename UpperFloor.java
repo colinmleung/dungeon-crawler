@@ -1,4 +1,5 @@
 
+
 public class UpperFloor implements Location {
 	Player player;
 	ItemHolder ih = new ItemHolder();
@@ -37,6 +38,19 @@ public class UpperFloor implements Location {
 		 System.out.println("You go back down the stairs to the entrance.");
 		 player.setLocation(player.goToEntrance());
 	}
+	
+
+	@Override
+	public void goForward() {
+		System.out.println("You walk forward into the hallway.");
+		player.setLocation(player.goToHallway());
+	}
+
+	@Override
+	public void goBack() {
+		System.out.println("You go back down the stairs to the entrance.");
+		player.setLocation(player.goToEntrance());
+	}
 
 	@Override
 	public boolean take(String item) {
@@ -65,4 +79,5 @@ public class UpperFloor implements Location {
 	public void addItem(String item) {
 		ih.add(item);
 	}
+
 }

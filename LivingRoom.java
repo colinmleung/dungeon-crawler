@@ -1,4 +1,5 @@
 
+
 public class LivingRoom implements Location {
 	Player player;
 	ItemHolder ih = new ItemHolder();
@@ -30,12 +31,23 @@ public class LivingRoom implements Location {
 
 	@Override
 	public void goUpStairs() {
-		 System.out.println("You take the stairs.");
+		 System.out.println("The stairs are nowhere nearby.");
 	}
 
 	@Override
 	public void goDownStairs() {
 		 System.out.println("You are already at the bottom floor of the house.");
+	}
+	
+	@Override
+	public void goForward() {
+		 System.out.println("You go forward into the dining room.");
+		 player.setLocation(player.goToDiningRoom());
+	}
+
+	@Override
+	public void goBack() {
+		System.out.println("You walk into the wall of the living room. Silly you.");
 	}
 	
 	@Override
